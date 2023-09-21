@@ -14,8 +14,8 @@ public class DataSourceConfig {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.extendedsystems.jdbc.advantage.ADSDriver");
         dataSource.setUrl("jdbc:extendedsystems:advantage://10.1.1.5:6262;catalog=//10.1.1.5/hdCserver/Sistemas/Siac;TableType=cdx;");
-        dataSource.setUsername("");
         dataSource.setPassword("");
+        dataSource.setUsername("");
         
         return dataSource;
     }
