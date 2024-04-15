@@ -11,16 +11,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.siac.service.ImageStorageService;
 
 @RestController
 @RequestMapping("/api/query")
 public class QueryController {
       private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private ImageStorageService imageStorageService;
 
     @Autowired
     public QueryController(JdbcTemplate jdbcTemplate) {
@@ -56,4 +62,15 @@ public class QueryController {
               return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
           }
       }
-}
+
+
+      @PostMapping("/upload-image")
+      public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file) {
+          try {
+              imageStorageService.storeImage(file);
+              return ResponseEntity.ok("Image uploaded successfully");
+          } catch (Exception e) {
+              return ResponseEntity.badRequest().body("Failed to upload image: " + e.getMessage());
+          }
+      }
+    }
