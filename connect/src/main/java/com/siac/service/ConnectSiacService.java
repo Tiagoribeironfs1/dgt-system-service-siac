@@ -7,10 +7,10 @@ import com.siac.controller.QueryController;
 
 
 @Service
-public class MyService {
+public class ConnectSiacService {
 
     @Autowired
-    public MyService(QueryController myRepository) {
+    public ConnectSiacService(QueryController myRepository) {
     }
 
     public void realizarOperacoesBancoDados() {
