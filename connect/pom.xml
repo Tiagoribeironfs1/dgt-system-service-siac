@@ -4,25 +4,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Parent POM Configuration -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.1</version>
+        <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <!-- Project Metadata -->
     <groupId>com.siac</groupId>
-    <artifactId>conncect</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>conncect</name>
-    <description>Demo project for Spring Boot</description>
+    <artifactId>AdvantageSIAC</artifactId>
+    <version>1.0.0</version>
+    <name>AdvantageSIAC Connector</name>
+    <description>The AdvantageSIAC Connector serves as a dedicated bridge facilitating secure and efficient connections to databases.</description>
 
+    <!-- Properties for Java and Encoding Setup -->
     <properties>
         <java.version>17</java.version>
     </properties>
 
+    <!-- Dependencies Configuration -->
     <dependencies>
-        <!-- Spring Boot Web Starter for RESTful services -->
+        <!-- Spring Boot Web Starter for building RESTful applications -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -34,42 +38,99 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <!-- H2 Database for in-memory database usage -->
+        <!-- PostgreSQL JDBC Driver for database connections -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Custom ADS JDBC driver -->
+        <!-- Testcontainers PostgreSQL Module for integration testing -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.19.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Custom ADS JDBC Driver -->
         <dependency>
             <groupId>com.extendedsystems</groupId>
             <artifactId>adsjdbc</artifactId>
             <version>10.10.0.49</version>
         </dependency>
 
-        <!-- Spring Boot DevTools for automatic restarts and development utilities -->
+        <!-- Spring Boot Development Tools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Spring Boot Test Starter for testing capabilities -->
+        <!-- Spring Boot Testing Support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Updated Jackson Databind Dependency -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+        
+        <!-- Updated Spring Web Dependency -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>6.1.6</version>
+        </dependency>
     </dependencies>
 
+    <!-- Build Configuration -->
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin Configuration -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- OWASP Dependency Check for Security Vulnerability Scanning -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>9.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
+    <!-- Profiles for Different Development and Production Environments -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 </project>
