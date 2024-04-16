@@ -1,7 +1,8 @@
-# Api Siac (future technology system)
+# AdvantageSIAC Connector
 
 ## Overview
-Describe the project briefly here.
+The AdvantageSIAC Connector serves as a dedicated bridge facilitating secure and efficient connections to the Advantage Database used by the SIAC auto parts system. This project streamlines data access and manipulation, providing robust and scalable integration solutions tailored for automotive industry requirements.
+
 
 ## Technology Stack
 - Java
