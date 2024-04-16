@@ -13,8 +13,6 @@ import java.util.Set;
 @Service
 public class ImageStorageService {
 
-    // private final Path rootLocation = Paths.get("/mnt/share/sistemas/ImagensPecas");
-    // private final Path rootLocation = Paths.get("Z:\\sistemas\\ImagensPecas");
     private static final Set<String> ALLOWED_FILE_TYPES = Set.of("image/jpeg", "image/png");
 
     public void storeImage(MultipartFile file, String storagePath) {
@@ -28,12 +26,14 @@ public class ImageStorageService {
             }
 
             Path rootLocation = Paths.get(storagePath).toAbsolutePath().normalize();
-            // Ensure the directory exists
+
+            // Check if the directory exists, if not throw an exception
             if (!Files.exists(rootLocation)) {
-                Files.createDirectories(rootLocation);
+                throw new StorageException("Directory does not exist: " + rootLocation);
             }
 
             Path destinationFile = rootLocation.resolve(Paths.get(file.getOriginalFilename())).normalize();
+            // Validate that the file is being stored within the designated directory
             if (!destinationFile.getParent().equals(rootLocation)) {
                 throw new StorageException("Cannot store file outside the designated directory.");
             }
