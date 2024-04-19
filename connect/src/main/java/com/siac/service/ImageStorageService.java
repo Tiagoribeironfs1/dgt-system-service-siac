@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
+
 @Service
 public class ImageStorageService {
 
@@ -43,4 +44,10 @@ public class ImageStorageService {
             throw new StorageException("Failed to store file: " + e.getMessage(), e);
         }
     }
+
+    public boolean exists(String filename, String path) {
+        Path imagePath = Paths.get(path, filename);
+        return Files.exists(imagePath);
+    }
+    
 }
