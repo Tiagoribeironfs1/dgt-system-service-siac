@@ -49,5 +49,19 @@ public class ImageStorageService {
         Path imagePath = Paths.get(path, filename);
         return Files.exists(imagePath);
     }
+
+    public void deleteImage(String filename, String path) {
+        Path imagePath = Paths.get(path, filename);
+        try {
+            if (Files.exists(imagePath)) {
+                Files.delete(imagePath);
+                System.out.println("Image deleted successfully: " + imagePath);
+            } else {
+                throw new StorageException("Image not found: " + imagePath);
+            }
+        } catch (IOException e) {
+            throw new StorageException("Failed to delete image: " + e.getMessage(), e);
+        }
+    }
     
 }

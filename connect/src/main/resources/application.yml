@@ -1,5 +1,19 @@
+myapp:
+  server-ip: "192.168.1.4"
+  # server-ip: "10.1.1.5"
+
 spring:
   datasource:
-    url: jdbc:extendedsystems:advantage://10.1.1.5:6262;catalog=//10.1.1.5/hdCserver/Sistemas/Siac;TableType=cdx;
+    url: jdbc:extendedsystems:advantage://${myapp.server-ip}:6262;catalog=//${myapp.server-ip}/hdSserver/Sistemas/Siac;TableType=cdx;
     username: ""
     password: ""
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 2MB
+  server:
+    port: 8081

@@ -17,6 +17,7 @@ public class ConnectApplication {
         ConnectSiacService connectSiacService = context.getBean(ConnectSiacService.class);
         connectSiacService.realizarOperacoesBancoDados();
         log.info("Service connect start localhost:8081");
+        System.out.println("Service connect start localhost:8081");
     }
 
 }
