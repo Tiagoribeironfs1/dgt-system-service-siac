@@ -21,9 +21,9 @@ public class ServiceController {
     public ResponseEntity<StatusResponse> getStatus() {
         Instant now = Instant.now();
         Duration uptime = Duration.between(startTime, now);
-        double cpuLoad = Double.parseDouble(decimalFormat.format(osBean.getCpuLoad() * 100));  // Format CPU load
-        double totalMemory = Double.parseDouble(decimalFormat.format(osBean.getTotalMemorySize() / (1024.0 * 1024.0 * 1024.0)));  // Convert to GB and format
-        double freeMemory = Double.parseDouble(decimalFormat.format(osBean.getFreeMemorySize() / (1024.0 * 1024.0 * 1024.0)));  // Convert to GB and format
+        double cpuLoad = osBean.getCpuLoad() * 100;  // Directly use the CPU load as a percentage
+        double totalMemory = osBean.getTotalMemorySize() / (1024.0 * 1024.0 * 1024.0);  // Convert to GB
+        double freeMemory = osBean.getFreeMemorySize() / (1024.0 * 1024.0 * 1024.0);  // Convert to GB
 
         StatusResponse status = new StatusResponse(
             "Service is active",
