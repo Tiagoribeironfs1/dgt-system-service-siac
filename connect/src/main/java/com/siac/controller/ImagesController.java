@@ -63,11 +63,15 @@ public class ImagesController {
 
         List<String> images = new ArrayList<>();
         String[] suffixes = {"", "A", "B", "C", "D", "E"}; // Suffixes for image variants
+        String[] extensions = {"jpg", "jpeg", "png","svg"};
     
         for (String suffix : suffixes) {
-            String imageName = productCode + suffix + ".jpg";
-            if (imageStorageService.exists(imageName, basePath)) {
-                images.add(baseUrl + imageName);
+            for (String extension : extensions) {
+                String imageName = productCode + suffix + "." + extension;
+                if (imageStorageService.exists(imageName, basePath)) {
+                    images.add(baseUrl + imageName);
+                    break; // Se encontrou uma imagem com a extensão, pare de verificar outras extensões
+                }
             }
         }
     

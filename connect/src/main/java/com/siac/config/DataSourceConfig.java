@@ -17,11 +17,11 @@ public class DataSourceConfig {
     @Bean
     public DataSource dataSource() {
         
-        // String serverIp = "192.168.1.4";
-        // String serverDbPath =  serverIp + "/hdServer/Sistemas/Siac;";
+        String serverIp = "192.168.1.4";
+        String serverDbPath =  serverIp + "/hdServer/Sistemas/Siac;";
 
-        String serverIp = "10.1.1.5";
-        String serverDbPath =  serverIp + "/hdCServer/Sistemas/Siac;";
+        // String serverIp = "10.1.1.5";
+        // String serverDbPath =  serverIp + "/hdCServer/Sistemas/Siac;";
         
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.extendedsystems.jdbc.advantage.ADSDriver");
