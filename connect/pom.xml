@@ -22,7 +22,11 @@
     <!-- Properties for Java and Encoding Setup -->
     <properties>
         <java.version>17</java.version>
+        <launch4j.version>3.50</launch4j.version>
+        <nvd.api.key>3c6f279f-0311-4f08-a173-c724530f2c2d</nvd.api.key>
     </properties>
+
+
 
     <!-- Dependencies Configuration -->
     <dependencies>
@@ -88,6 +92,12 @@
             <artifactId>spring-web</artifactId>
             <version>6.1.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!-- Build Configuration -->
@@ -99,8 +109,46 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- OWASP Dependency Check for Security Vulnerability Scanning -->
+            <!-- Launch4j Maven Plugin -->
             <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>2.5.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dontWrapJar>false</dontWrapJar>
+                    <headerType>console</headerType>
+                    <priority>normal</priority>
+                    <restartOnCrash>true</restartOnCrash>
+
+                    <!-- Path to the generated .jar file -->
+                    <jar>target/${project.build.finalName}.jar</jar>
+                    <outfile>target/${project.build.finalName}.exe</outfile>
+
+                    <downloadUrl>http://java.com/download</downloadUrl>
+
+                    <jre>
+                        <path>/home/tiagoribeiro/www/projects/dgt-system/service-siac/connect/jre</path>
+                        <requiresJdk>true</requiresJdk>
+                        <requires64Bit>true</requires64Bit>
+                        <minVersion>17</minVersion>
+                        <maxVersion></maxVersion>
+                    </jre>
+
+                    <!-- Path to the icon -->
+                    <icon>src/main/resources/icons/snapstore.ico</icon> <!-- Path to the .ico file -->
+                </configuration>
+            </plugin>
+
+            <!-- OWASP Dependency Check for Security Vulnerability Scanning -->
+            <!-- Chave API: 3c6f279f-0311-4f08-a173-c724530f2c2d   -->
+            <!-- <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>9.1.0</version>
@@ -111,7 +159,13 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+                <configuration>
+                    <cveUrlModified>https://services.nvd.nist.gov/rest/json/cves/1.0</cveUrlModified>
+                    <cveUrlBase>https://services.nvd.nist.gov/rest/json/cves/1.0</cveUrlBase>
+                    <apiKey>${nvd.api.key}</apiKey>
+                </configuration>
+            </plugin> -->
+
         </plugins>
     </build>
 
