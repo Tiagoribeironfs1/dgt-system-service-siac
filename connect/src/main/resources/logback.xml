@@ -1,13 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>logs/application.log</file>
-    <append>false</append>
-    <encoder>
-      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-  
-  <root level="info">
-    <appender-ref ref="FILE" />
-  </root>
+
+    <!-- Define nível de log global como INFO -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <!-- Configuração do appender do console com cores ANSI -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) %magenta(%logger{36}) - %green(%msg) %n%red(%ex{short})
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- Nível de log específico para o seu pacote -->
+    <logger name="com.siac" level="DEBUG" />
+
 </configuration>
