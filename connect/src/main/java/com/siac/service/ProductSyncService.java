@@ -89,8 +89,8 @@ public class ProductSyncService {
                 // Atualizar lastCodpro com o valor do último produto processado
                 lastCodpro = (String) product.get("CODPRO");
     
-                // Salvar o último CODPRO para continuar a partir daí
-                CodproManager.saveLastCodpro(lastCodpro);
+                // // Salvar o último CODPRO para continuar a partir daí
+                // CodproManager.saveLastCodpro(lastCodpro);
             }
         }
     }
@@ -225,7 +225,7 @@ public class ProductSyncService {
 
     private String getLastCodproFromApi() {
         RestTemplate restTemplate = new RestTemplate();
-        String apiUrl = "http://localhost:3000/v1/warehouse/products/tenant/162b6eea-2b7c-4118-9bb6-c02c95f36e05/products/lastproduct";
+        String apiUrl = API_BASE_URL + "/v1/warehouse/products/tenant/"+ TENANT_ID +"/products/lastproduct";
     
         try {
             ResponseEntity<Map> response = restTemplate.getForEntity(apiUrl, Map.class);

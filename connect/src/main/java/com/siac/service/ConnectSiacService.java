@@ -26,8 +26,8 @@ public class ConnectSiacService {
     private final JdbcTemplate jdbcTemplate;
     private final RestTemplate restTemplate;
 
-    private static final String API_ENDPOINT = "http://localhost:3000/v1/stores";
-    private static final String API_CHECK_ENDPOINT = "http://localhost:3000/v1/stores/tenant/{tenantId}/store/{storeId}";
+    @Value("${api.base.url}")
+    private String API_BASE_URL;
 
     @Value("${snapStore.tenantId}")
     private String TENANT_ID;
@@ -99,7 +99,7 @@ public class ConnectSiacService {
                 headers.set("Content-Type", "application/json");
 
                 HttpEntity<Map<String, Object>> request = new HttpEntity<>(storeJson, headers);
-                ResponseEntity<String> response = restTemplate.exchange(API_ENDPOINT, HttpMethod.POST, request, String.class);
+                ResponseEntity<String> response = restTemplate.exchange(API_BASE_URL + "/v1/stores", HttpMethod.POST, request, String.class);
 
                 if (response.getStatusCode().is2xxSuccessful()) {
                     log.info("Store enviada com sucesso: {}", storeJson.get("storeId"));
@@ -115,7 +115,7 @@ public class ConnectSiacService {
     // Método para verificar se a loja já existe
     private boolean checkIfStoreExists(String tenantId, String storeId) {
         try {
-            String url = API_CHECK_ENDPOINT.replace("{tenantId}", tenantId).replace("{storeId}", storeId);
+            String url = API_BASE_URL + "/v1/stores/tenant/" + tenantId + "/store/" + storeId;
 
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
 

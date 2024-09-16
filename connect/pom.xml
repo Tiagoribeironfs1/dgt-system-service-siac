@@ -134,7 +134,7 @@
                     <downloadUrl>http://java.com/download</downloadUrl>
 
                     <jre>
-                        <path>/home/tiagoribeiro/www/projects/dgt-system/service-siac/connect/jre</path>
+                        <path>/home/digitaltracer/www/projects/dgt-system/service-siac/connect/jre</path>
                         <requiresJdk>true</requiresJdk>
                         <requires64Bit>true</requires64Bit>
                         <minVersion>17</minVersion>
