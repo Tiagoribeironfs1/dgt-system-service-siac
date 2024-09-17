@@ -16,7 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,14 +35,40 @@ public class ProductSyncService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    
+
+    @Autowired
+    private ConnectSiacService connectSiacService; // Injetar o ConnectSiacService
+
+    @Autowired
+    private ThreadPoolTaskScheduler taskScheduler; // Para iniciar o cron dinamicamente
+
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // Executa o serviço periodicamente (por exemplo, a cada 5 minutos)
+    private boolean storesVerified = false;
+
     @PostConstruct
-    @Scheduled(fixedRate = 300000) // 300000 ms = 5 minutos
+    public void startProcess() {
+        // Executar a verificação de lojas primeiro
+        connectSiacService.searchStores();
+
+        // Após a execução da verificação de lojas, habilitar o agendamento
+        storesVerified = true;
+
+        // Iniciar o cron dinamicamente
+        startScheduledTask();
+    }
+
+    // Iniciar a tarefa agendada após a verificação das lojas
+    @SuppressWarnings("deprecation")
+    private void startScheduledTask() {
+        if (storesVerified) {
+            taskScheduler.scheduleAtFixedRate(this::syncNewProducts, 300000); // Executar a cada 5 minutos
+        }
+    }
+
+
     public void syncNewProducts() {
-        int limit = 500;  // Tamanho do lote para buscar novos produtos
+        int limit = 1000;  // Tamanho do lote para buscar novos produtos
     
         // Obter o lastCodpro a partir da resposta da API
         String lastCodpro = getLastCodproFromApi();
@@ -211,7 +237,7 @@ public class ProductSyncService {
             headers.set("Content-Type", "application/json");
 
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(storageJson, headers);
-            ResponseEntity<String> response = restTemplate.exchange(API_BASE_URL + "/v1/storages/tenant/" + TENANT_ID, HttpMethod.POST, request, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(API_BASE_URL + "/v1/storages", HttpMethod.POST, request, String.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 log.info("Estoque enviado com sucesso para o produto: {}", storageJson.get("productId"));

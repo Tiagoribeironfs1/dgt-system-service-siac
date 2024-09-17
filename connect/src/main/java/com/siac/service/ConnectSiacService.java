@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -46,20 +45,8 @@ public class ConnectSiacService {
             "    cidade AS location " +
             "FROM tpd001";
 
-    // Agendamento para segunda a sexta, das 08:00 às 19:00
-    @Scheduled(cron = "0 */5 8-19 * * MON-FRI")
-    public void realizarOperacoesBancoDadosDiasUteis() {
-        executarConsulta();
-    }
-
-    // Agendamento para sábado, das 08:00 às 15:00
-    @Scheduled(cron = "0 */5 8-15 * * SAT")
-    public void realizarOperacoesBancoDadosSabado() {
-        executarConsulta();
-    }
-
-    // Método comum para executar a consulta e enviar os dados para a API
-    private void executarConsulta() {
+    // Método para executar a consulta e enviar os dados para a API
+    public void searchStores() {
         try {
             List<Map<String, Object>> result = jdbcTemplate.queryForList(SQL);
             result.forEach(row -> {
@@ -74,7 +61,6 @@ public class ConnectSiacService {
         }
     }
 
-    // Método para construir o JSON no formato correto
     private Map<String, Object> buildStoreJson(Map<String, Object> store) {
         Map<String, Object> storeJson = new HashMap<>();
         storeJson.put("tenantId", TENANT_ID);
@@ -86,11 +72,9 @@ public class ConnectSiacService {
         return storeJson;
     }
 
-    // Método para verificar se a loja já está cadastrada e enviar o JSON para a API se não estiver
     private void sendStoreToApi(Map<String, Object> storeJson) {
         String storeId = (String) storeJson.get("storeId");
 
-        // Verificar se a loja já existe
         if (checkIfStoreExists(TENANT_ID, storeId)) {
             log.info("Loja já cadastrada: {}", storeId);
         } else {
@@ -112,17 +96,14 @@ public class ConnectSiacService {
         }
     }
 
-    // Método para verificar se a loja já existe
     private boolean checkIfStoreExists(String tenantId, String storeId) {
         try {
             String url = API_BASE_URL + "/v1/stores/tenant/" + tenantId + "/store/" + storeId;
 
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
-            // Se a resposta for 2xx, a loja existe
             return response.getStatusCode().is2xxSuccessful();
         } catch (HttpClientErrorException.NotFound e) {
-            // Se a loja não for encontrada, retorna false
             return false;
         } catch (Exception e) {
             log.error("Erro ao verificar se a loja existe: {}", e.getMessage(), e);
