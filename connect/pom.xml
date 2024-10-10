@@ -130,16 +130,36 @@
                     <!-- Path to the generated .jar file -->
                     <jar>target/${project.build.finalName}.jar</jar>
                     <outfile>target/${project.build.finalName}.exe</outfile>
+                    <errTitle>Será nescessario intalar Java JDK</errTitle>
 
-                    <downloadUrl>http://java.com/download</downloadUrl>
+                    <messages>
+                        <startupErr>text</startupErr>
+                        <jreNotFoundErr>Será nescessario intalar Java JDK</jreNotFoundErr>
+                        <jreVersionErr>Será nescessario atualizar Java JDK</jreVersionErr>
+                        <!-- Used by console header only. -->
+                        <instanceAlreadyExistsMsg>Já esta sendo executado</instanceAlreadyExistsMsg>
+                    </messages>
+
+                    <downloadUrl>https://www.oracle.com/br/java/technologies/downloads/#jdk22-windows</downloadUrl>
 
                     <jre>
                         <path>/home/digitaltracer/www/projects/dgt-system/service-siac/connect/jre</path>
                         <requiresJdk>true</requiresJdk>
                         <requires64Bit>true</requires64Bit>
-                        <minVersion>17</minVersion>
+                        <minVersion>8</minVersion>
                         <maxVersion></maxVersion>
                     </jre>
+
+                    <versionInfo>
+                        <productName>SnapStore</productName>
+                        <companyName>Digital Tracer</companyName>
+                        <copyright>© 2024 Digital Tracer. Todos os direitos reservados.</copyright>
+                    </versionInfo>
+
+                    <!-- Command line to run a confirmation script -->
+                    <cmdline>
+                        powershell -Command "if ((Read-Host 'Voce gostaria de baixar a JDK antes de continuar? (s/n)') -eq 's') { exit 0 } else { exit 1 }"
+                    </cmdline>
 
                     <!-- Path to the icon -->
                     <icon>src/main/resources/icons/snapstore.ico</icon> <!-- Path to the .ico file -->
